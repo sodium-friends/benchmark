@@ -1,7 +1,6 @@
 const cronometro = require('cronometro')
 const { createHash, randomBytes } = require('crypto')
 const sodium = require('sodium-native')
-const sodiumJS = require('sodium-javascript')
 
 const shortData = randomBytes(64)
 const mediumData = randomBytes(384)
@@ -12,7 +11,6 @@ const output512 = Buffer.allocUnsafe(64)
 const state = Buffer.allocUnsafe(sodium.crypto_generichash_STATEBYTES)
 
 function size (name, data) {
-  console.log(name)
   cronometro({
     'crypto sha256 (no prealloc)': function () {
       createHash('sha256').update(data).digest()
@@ -47,14 +45,9 @@ function size (name, data) {
       sodium.crypto_generichash_init(state, null, 32)
       sodium.crypto_generichash_update(state, data)
       sodium.crypto_generichash_final(state, output256)
-    },
-    'sodium-javascript generichash (prealloc)': function () {
-      sodiumJS.crypto_generichash(output512, data)
-    },
-    'sodium-javascript generichash (32, prealloc)': function () {
-      sodiumJS.crypto_generichash(output256, data)
     }
   }, {
+    iterations: 50000,
     print: {
       compare: true,
       compareMode: 'base'
