@@ -6,9 +6,9 @@ const shortData = randomBytes(64)
 const mediumData = randomBytes(384)
 const longData = randomBytes(4096)
 const megaData = randomBytes(2 ** 23)
-const output256 = Buffer.allocUnsafe(32)
-const output512 = Buffer.allocUnsafe(64)
-const state = Buffer.allocUnsafe(sodium.crypto_generichash_STATEBYTES)
+const output256 = Buffer.alloc(32)
+const output512 = Buffer.alloc(64)
+const state = Buffer.alloc(sodium.crypto_generichash_STATEBYTES)
 
 function size (name, data) {
   return cronometro({
@@ -47,23 +47,23 @@ function size (name, data) {
       sodium.crypto_generichash_final(state, output256)
     },
     'sodium-native generichash (no prealloc)': function () {
-      const output512 = Buffer.allocUnsafe(64)
+      const output512 = Buffer.alloc(64)
       sodium.crypto_generichash(output512, data)
     },
     'sodium-native generichash (state no reuse)': function () {
-      const output512 = Buffer.allocUnsafe(64)
-      const state = Buffer.allocUnsafe(sodium.crypto_generichash_STATEBYTES)
+      const output512 = Buffer.alloc(64)
+      const state = Buffer.alloc(sodium.crypto_generichash_STATEBYTES)
       sodium.crypto_generichash_init(state, null, 64)
       sodium.crypto_generichash_update(state, data)
       sodium.crypto_generichash_final(state, output512)
     },
     'sodium-native generichash (32, no prealloc)': function () {
-      const output256 = Buffer.allocUnsafe(32)
+      const output256 = Buffer.alloc(32)
       sodium.crypto_generichash(output256, data)
     },
     'sodium-native generichash (32, state no reuse)': function () {
-      const output256 = Buffer.allocUnsafe(32)
-      const state = Buffer.allocUnsafe(sodium.crypto_generichash_STATEBYTES)
+      const output256 = Buffer.alloc(32)
+      const state = Buffer.alloc(sodium.crypto_generichash_STATEBYTES)
       sodium.crypto_generichash_init(state, null, 32)
       sodium.crypto_generichash_update(state, data)
       sodium.crypto_generichash_final(state, output256)
