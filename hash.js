@@ -11,7 +11,7 @@ const output512 = Buffer.allocUnsafe(64)
 const state = Buffer.allocUnsafe(sodium.crypto_generichash_STATEBYTES)
 
 function size (name, data) {
-  cronometro({
+  return cronometro({
     'crypto sha256 (no prealloc)': function () {
       createHash('sha256').update(data).digest()
     },
@@ -47,7 +47,7 @@ function size (name, data) {
       sodium.crypto_generichash_final(state, output256)
     }
   }, {
-    iterations: 50000,
+    iterations: 10,
     print: {
       compare: true,
       compareMode: 'base'
@@ -55,7 +55,9 @@ function size (name, data) {
   })
 }
 
-size('64 bytes', shortData)
-size('384 bytes', mediumData)
-size('4096 bytes', longData)
-size('4 MB', megaData)
+;(async () => {
+  await size('64 bytes', shortData)
+  await size('384 bytes', mediumData)
+  await size('4096 bytes', longData)
+  await size('4 MB', megaData)
+})()
