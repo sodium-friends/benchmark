@@ -45,6 +45,28 @@ function size (name, data) {
       sodium.crypto_generichash_init(state, null, 32)
       sodium.crypto_generichash_update(state, data)
       sodium.crypto_generichash_final(state, output256)
+    },
+    'sodium-native generichash (no prealloc)': function () {
+      const output512 = Buffer.allocUnsafe(64)
+      sodium.crypto_generichash(output512, data)
+    },
+    'sodium-native generichash (state no reuse)': function () {
+      const output512 = Buffer.allocUnsafe(64)
+      const state = Buffer.allocUnsafe(sodium.crypto_generichash_STATEBYTES)
+      sodium.crypto_generichash_init(state, null, 64)
+      sodium.crypto_generichash_update(state, data)
+      sodium.crypto_generichash_final(state, output512)
+    },
+    'sodium-native generichash (32, no prealloc)': function () {
+      const output256 = Buffer.allocUnsafe(32)
+      sodium.crypto_generichash(output256, data)
+    },
+    'sodium-native generichash (32, state no reuse)': function () {
+      const output256 = Buffer.allocUnsafe(32)
+      const state = Buffer.allocUnsafe(sodium.crypto_generichash_STATEBYTES)
+      sodium.crypto_generichash_init(state, null, 32)
+      sodium.crypto_generichash_update(state, data)
+      sodium.crypto_generichash_final(state, output256)
     }
   }, {
     iterations: 10000,
