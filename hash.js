@@ -6,11 +6,13 @@ const sodiumJS = require('sodium-javascript')
 const shortData = randomBytes(64)
 const mediumData = randomBytes(384)
 const longData = randomBytes(4096)
+const megaData = randomBytes(2 ** 23)
 const output256 = Buffer.allocUnsafe(32)
 const output512 = Buffer.allocUnsafe(64)
 const state = Buffer.allocUnsafe(sodium.crypto_generichash_STATEBYTES)
 
-function size (data) {
+function size (name, data) {
+  console.log(name)
   cronometro({
     'crypto sha256 (no prealloc)': function () {
       createHash('sha256').update(data).digest()
@@ -53,10 +55,14 @@ function size (data) {
       sodiumJS.crypto_generichash(output256, data)
     }
   }, {
-    print: { compare: true }
+    print: {
+      compare: true,
+      compareMode: 'base'
+    }
   })
 }
 
-size(shortData)
-size(mediumData)
-size(longData)
+size('64 bytes', shortData)
+size('384 bytes', mediumData)
+size('4096 bytes', longData)
+size('4 MB', megaData)
