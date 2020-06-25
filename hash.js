@@ -47,7 +47,7 @@ function size (name, data) {
       sodium.crypto_generichash_final(state, output256)
     }
   }, {
-    iterations: 10,
+    iterations: 10000,
     print: {
       compare: true,
       compareMode: 'base'
