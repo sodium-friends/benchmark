@@ -67,6 +67,61 @@ function size (name, data) {
       sodium.crypto_generichash_init(state, null, 32)
       sodium.crypto_generichash_update(state, data)
       sodium.crypto_generichash_final(state, output256)
+    },
+    'crypto sha256 (no prealloc, digest)': function () {
+      createHash('sha256').update(data).digest('hex')
+    },
+    'crypto sha512 (no prealloc, digest)': function () {
+      createHash('sha512').update(data).digest('hex')
+    },
+    'crypto blake2b512 (no prealloc, digest)': function () {
+      createHash('blake2b512').update(data).digest('hex')
+    },
+    'sodium-native generichash (prealloc, digest)': function () {
+      sodium.crypto_generichash(output512, data)
+      output512.toString('hex')
+    },
+    'sodium-native generichash (state reuse, digest)': function () {
+      sodium.crypto_generichash_init(state, null, 64)
+      sodium.crypto_generichash_update(state, data)
+      sodium.crypto_generichash_final(state, output512)
+      output512.toString('hex')
+    },
+    'sodium-native generichash (32, prealloc, digest)': function () {
+      sodium.crypto_generichash(output256, data)
+      output256.toString('hex')
+    },
+    'sodium-native generichash (32, state reuse, digest)': function () {
+      sodium.crypto_generichash_init(state, null, 32)
+      sodium.crypto_generichash_update(state, data)
+      sodium.crypto_generichash_final(state, output256)
+      output256.toString('hex')
+    },
+    'sodium-native generichash (no prealloc, digest)': function () {
+      const output512 = Buffer.alloc(64)
+      sodium.crypto_generichash(output512, data)
+      output512.toString('hex')
+    },
+    'sodium-native generichash (state no reuse, digest)': function () {
+      const output512 = Buffer.alloc(64)
+      const state = Buffer.alloc(sodium.crypto_generichash_STATEBYTES)
+      sodium.crypto_generichash_init(state, null, 64)
+      sodium.crypto_generichash_update(state, data)
+      sodium.crypto_generichash_final(state, output512)
+      output512.toString('hex')
+    },
+    'sodium-native generichash (32, no prealloc, digest)': function () {
+      const output256 = Buffer.alloc(32)
+      sodium.crypto_generichash(output256, data)
+      output256.toString('hex')
+    },
+    'sodium-native generichash (32, state no reuse, digest)': function () {
+      const output256 = Buffer.alloc(32)
+      const state = Buffer.alloc(sodium.crypto_generichash_STATEBYTES)
+      sodium.crypto_generichash_init(state, null, 32)
+      sodium.crypto_generichash_update(state, data)
+      sodium.crypto_generichash_final(state, output256)
+      output256.toString('hex')
     }
   }, {
     iterations: 10000,
