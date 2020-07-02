@@ -1,6 +1,15 @@
 {
   "dependencies": {
+    "benchmark": "^2.1.4",
     "cronometro": "^0.4.0",
+    "microtime": "^3.0.0",
     "sodium-universal": "^3.0.1"
+  },
+  "devDependencies": {
+    "browserify": "^16.5.1",
+    "tape-run": "^7.0.0"
+  },
+  "scripts": {
+    "browser": "browserify hash-sha-browser > bundle.js"
   }
 }
